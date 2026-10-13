@@ -302,6 +302,18 @@ class DALTONIRTest(GenericIRTest):
     nrotconsts = 2
     rotconsts = [4.6178434, 0.6857618, 0.5970921]
 
+    def testhessian_values(self, data: "ccData") -> None:
+        """Are entries from every printed column block placed correctly?
+
+        DALTON prints the lower triangle in blocks of 6 columns; entries
+        from later blocks must not overwrite the first one.
+        """
+        # first block, first entry
+        assert abs(data.hessian[0, 0] - 0.705820) < 1.0e-6
+        # last block, last diagonal entry
+        assert abs(data.hessian[-1, -1] - 0.024963) < 1.0e-6
+        assert np.count_nonzero(data.hessian[:, 6:]) > 0
+
 
 class FireflyIRTest(GenericIRTest):
     """Customized vibrational frequency unittest"""

@@ -1038,7 +1038,7 @@ class DALTON(logfileparser.Logfile):
                         line = next(inputfile)
                         nums = [float(x) for x in line.split()[2:]]
                         assert 1 <= len(nums) <= max_ncols_per_block
-                        hessian[(3 * irow) + icoord, : len(nums)] = nums
+                        hessian[icol + (3 * irow) + icoord, icol : icol + len(nums)] = nums
                     line = next(inputfile)
                 self.skip_lines(inputfile, ["b", "x y z header", "b"])
                 icol += max_ncols_per_block
