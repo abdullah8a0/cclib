@@ -519,19 +519,18 @@ class Turbomole(logfileparser.Logfile):
         #     Optint: norm of internal gradient       0.00029710
         #
         if "CARTESIAN GRADIENTS" in line:
-            atomcoords = []
+            grads = []
             atomnos = []
             line = next(inputfile)
             while len(line.split()) == 5:
                 atomnos.append(self.periodic_table.number[line.split()[-4].capitalize()])
-                atomcoords.append(
-                    [utils.convertor(float(x), "bohr", "Angstrom") for x in line.split()[-3:]]
-                )
+                # Already in hartree/bohr, the units of grads; no conversion.
+                grads.append([float(x) for x in line.split()[-3:]])
                 line = next(inputfile)
 
             self.set_attribute("atomnos", atomnos)
-            self.set_attribute("natom", len(atomcoords))
-            self.append_attribute("grads", atomcoords)
+            self.set_attribute("natom", len(grads))
+            self.append_attribute("grads", grads)
 
         ## Atomic coordinates in job.last:
         #              +--------------------------------------------------+

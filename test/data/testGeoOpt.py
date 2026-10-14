@@ -548,6 +548,12 @@ class TurbomoleGeoOptTest(GenericGeoOptTest):
     extracoords = 1
     extrascfs = 0
 
+    def testgrads_values(self, data: "ccData") -> None:
+        """Are grads kept in hartree/bohr, as printed (no length conversion)?"""
+        # job.last, CARTESIAN GRADIENTS, atom 1
+        expected = [-0.00006249573129, -0.00001452041025, -0.00002380577094]
+        numpy.testing.assert_allclose(data.grads[-1][0], expected, rtol=1.0e-10)
+
     def testoptstatus(self, data: "ccData") -> None:
         """Is optstatus consistent with geovalues and reasonable?"""
         assert len(data.optstatus) == len(data.geovalues)
